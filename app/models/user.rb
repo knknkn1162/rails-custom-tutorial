@@ -9,7 +9,8 @@ class User < ApplicationRecord
     length: { maximum: 255 },
     format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i },
     uniqueness: { case_sensitive: false }
-
+  # you can use password & password_confirmation attribute
+  has_secure_password
   private
   def downcase_email
     email.downcase!
