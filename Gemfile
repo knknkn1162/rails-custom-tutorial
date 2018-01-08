@@ -49,11 +49,12 @@ group :development, :test do
   # load rspec faster
   gem 'spring-commands-rspec'
   gem 'rails-controller-testing'
+  gem 'shoulda-callback-matchers'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
-  gem 'factory_bot'
+  gem 'factory_bot_rails'
   gem 'selenium-webdriver'
 end
 
