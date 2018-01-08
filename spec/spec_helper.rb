@@ -18,6 +18,7 @@ require 'capybara/rails'
 RSpec.configure do |config|
   config.include Capybara::DSL
   config.include FactoryBot::Syntax::Methods
+  config.include Shoulda::Callback::Matchers::ActiveModel
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
