@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  context ':user should be valid' do
+  context 'validation test' do
     it 'shold be valid' do
       user = build(:user)
       expect(user).to be_valid
@@ -37,6 +37,18 @@ RSpec.describe User, type: :model do
         user = build(:user, email: invalid_address)
         expect(user).not_to be_valid
       end
+    end
+
+    it 'should have password present(nonblank) ' do
+      sample_pwd = ' ' * 6
+      user = build(:user, password: sample_pwd, password_confirmation: sample_pwd)
+      expect(user).not_to be_valid
+    end
+
+    it 'should have password with a minimum length' do
+      sample_pwd = 'a' * 5
+      user = build(:user, password: sample_pwd, password_confirmation: sample_pwd)
+      expect(user).not_to be_valid
     end
   end
   context 'callback test' do
