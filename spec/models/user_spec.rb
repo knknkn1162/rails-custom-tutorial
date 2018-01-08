@@ -39,4 +39,11 @@ RSpec.describe User, type: :model do
       end
     end
   end
+  context 'callback test' do
+    let(:user) { create(:user, email: 'Foo@ExAmPle.CoM') }
+    it 'email addresses sholdb be saved as lower-case' do
+      expect(user).to callback(:downcase_email).before(:save)
+      expect(user.email).to eq('foo@example.com')
+    end
+  end
 end
