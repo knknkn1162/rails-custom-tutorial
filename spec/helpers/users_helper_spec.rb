@@ -11,5 +11,12 @@ require 'rails_helper'
 #   end
 # end
 RSpec.describe UsersHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'users helper' do
+    it 'has correct return_value for gravatar_for' do
+      sample_email = 'sample@gmail.com'
+      user = build(:user, email: sample_email)
+      id = Digest::MD5::hexdigest(sample_email)
+      expect(helper.gravatar_for(user)).to include 'https://secure.gravatar.com/avatar/acb479080840025a9c03f8453f5c853c?s=80'
+    end
+  end
 end
