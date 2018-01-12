@@ -15,6 +15,12 @@ class User < ApplicationRecord
   # you can use password & password_confirmation attribute
   # and authenticate method
   has_secure_password
+
+  def self.digest(string)
+    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
+    BCrypt::Password.create(string, cost: cost)
+  end
+
   private
   def downcase_email
     email.downcase!
