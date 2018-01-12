@@ -31,7 +31,7 @@ RSpec.describe "Users", type: :request do
   end
 
   describe 'GET /login' do
-    it 'login with valid information' do
+    it 'login with valid information followed by logout' do
       user = create(:user)
       get login_path
       post login_path, params: { session: attributes_for(:user) }
@@ -40,6 +40,11 @@ RSpec.describe "Users", type: :request do
 
       expect(response).to render_template(:show)
       expect(session[:user_id]).to be
+
+      delete logout_path
+      expect(session[:user_id]).not_to be
+      expect(response).to redirect_to(root_url)
     end
+
   end
 end
