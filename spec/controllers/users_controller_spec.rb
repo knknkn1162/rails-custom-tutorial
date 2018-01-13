@@ -1,6 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
+
+  subject(:invalid_user) {
+    {
+        name: '',
+        email: 'foo@invalid',
+        password: 'foo',
+        password_confirmation: 'bar'
+    }
+  }
+  
   describe "GET #signup" do
     it "returns http success" do
       get :new
@@ -14,6 +24,15 @@ RSpec.describe UsersController, type: :controller do
       get :edit, params: { id: user.id }
       expect(flash[:danger]).to be
       expect(response).to redirect_to('/login')
+    end
+  end
+
+  describe "POST /signup" do
+    it 'submit with invalid users' do
+      expect {
+        post :create, params: { user: invalid_user }
+      }.to change(User, :count).by(0)
+      expect(response).to render_template(:new)
     end
   end
 

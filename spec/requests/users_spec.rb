@@ -11,15 +11,8 @@ RSpec.describe "Users", type: :request do
   }
 
   describe "POST /signup" do
-    it 'submit with invalid users' do
-      get signup_path
-      expect(response).to have_http_status(200)
-      expect { post users_path, params: { user: invalid_user } }.to change(User, :count).by(0)
-      expect(response).to render_template(:new)
-    end
-
+    # accompany with redirect
     it 'submit with valid users' do
-      get signup_path
       expect { post users_path, params: { user: attributes_for(:user) } }.to change(User, :count).by(1)
       expect(response).to redirect_to(assigns(:user))
 
@@ -33,7 +26,6 @@ RSpec.describe "Users", type: :request do
   describe 'POST /login' do
     it 'login with valid information followed by logout' do
       user = create(:user)
-      get login_path
       post login_path, params: { session: attributes_for(:user) }
       expect(response).to redirect_to(user)
       follow_redirect!
