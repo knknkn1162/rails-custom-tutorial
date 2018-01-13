@@ -7,11 +7,23 @@ RSpec.describe UsersController, type: :controller do
       expect(response).to have_http_status(:success)
     end
   end
-  it 'GET #edit' do
-    user = create(:user)
-    get :edit, params: { id: user.id }
-    expect(response).to have_http_status(:success)
-    expect(assigns(:user)).to eq user
-    expect(response).to render_template(:edit)
+  describe 'GET #edit' do
+    it 'redirects edit when not logged in' do
+      user = create(:user)
+      # NOT exec log_in_as(...)
+      get :edit, params: { id: user.id }
+      expect(flash[:danger]).to be
+      expect(response).to redirect_to('/login')
+    end
+  end
+
+  describe 'PATCH #update' do
+    it 'redirects update when not logged in' do
+      user = create(:user)
+      # NOT exec log_in_as(...)
+      patch :update, params: { user: attributes_for(:user), id: user.id }
+      expect(flash[:danger]).to be
+      expect(response).to redirect_to('/login')
+    end
   end
 end
