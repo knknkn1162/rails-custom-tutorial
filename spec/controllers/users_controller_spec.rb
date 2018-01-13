@@ -10,7 +10,7 @@ RSpec.describe UsersController, type: :controller do
         password_confirmation: 'bar'
     }
   }
-  
+
   describe "GET #signup" do
     it "returns http success" do
       get :new
