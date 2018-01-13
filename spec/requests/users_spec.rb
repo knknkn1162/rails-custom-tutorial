@@ -50,6 +50,8 @@ RSpec.describe "Users", type: :request do
   describe 'POST /edit' do
     it 'unsuccessful edit' do
       user = create(:user)
+      # login in advance
+      post login_path, params: { session: attributes_for(:user) }
       get edit_user_path(user)
 
       patch user_path(user), params: { user: invalid_user }
@@ -59,9 +61,12 @@ RSpec.describe "Users", type: :request do
 
     it 'successful edit' do
       user = create(:user)
+      # login in advance
+      post login_path, params: { session: attributes_for(:user) }
+
       get edit_user_path(user)
-      name, email = 'Foo Bar', 'foo@bar.com'
-      new_user = build(:user, name: name, email: email)
+      name = 'Foo Bar'
+      email = 'foo@bar.com'
       patch user_path(user), params: {
         user: {
           name: name,
@@ -75,7 +80,6 @@ RSpec.describe "Users", type: :request do
 
       user.reload
       expect([user.name, user.email]).to eq [name, email]
-
     end
   end
 end
