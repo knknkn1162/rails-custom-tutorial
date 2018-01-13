@@ -52,10 +52,7 @@ RSpec.describe "Users", type: :request do
       user = create(:user)
       get edit_user_path(user)
 
-      expect {
-        patch user_path(user), params: { user: invalid_user }
-      }.to change(User, :count).by(0)
-
+      patch user_path(user), params: { user: invalid_user }
       expect(response).to render_template(:edit)
     end
   end
