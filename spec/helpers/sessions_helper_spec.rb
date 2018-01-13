@@ -26,5 +26,12 @@ RSpec.describe SessionsHelper, type: :helper do
       expect(session[:user_id]).to be user.id
       expect(helper.cookies.signed[:user_id]).not_to be
     end
+
+    it 'not works current_user when changing remember_digest' do
+      user = create(:user)
+      helper.remember(user)
+      user.update_attribute(:remember_digest, User.digest(User.new_token))
+      expect(helper.get_current_user).not_to be
+    end
   end
 end
