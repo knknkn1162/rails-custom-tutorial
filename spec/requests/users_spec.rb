@@ -10,7 +10,7 @@ RSpec.describe "Users", type: :request do
     }
   }
 
-  describe "GET /signup" do
+  describe "POST /signup" do
     it 'submit with invalid users' do
       get signup_path
       expect(response).to have_http_status(200)
@@ -30,7 +30,7 @@ RSpec.describe "Users", type: :request do
     end
   end
 
-  describe 'GET /login' do
+  describe 'POST /login' do
     it 'login with valid information followed by logout' do
       user = create(:user)
       get login_path
@@ -45,6 +45,18 @@ RSpec.describe "Users", type: :request do
       expect(session[:user_id]).not_to be
       expect(response).to redirect_to(root_url)
     end
+  end
 
+  describe 'POST /edit' do
+    it 'unsuccessful edit' do
+      user = create(:user)
+      get edit_user_path(user)
+
+      expect {
+        patch user_path(user), params: { user: invalid_user }
+      }.to change(User, :count).by(0)
+
+      expect(response).to render_template(:edit)
+    end
   end
 end
