@@ -39,6 +39,31 @@ RSpec.describe "Users", type: :request do
     end
   end
 
+  describe 'PATCH /update' do
+    it 'should redirect edit when logged in as wrong user' do
+      other = create(:other)
+      user = create(:user)
+      # log in as other user in advance
+      post login_path, params: { session: attributes_for(:user) }
+
+      patch user_path(other), params: { user: attributes_for(:user) }
+
+      expect(flash).to be
+      expect(response).to redirect_to(root_url)
+    end
+
+    it 'should redirect update when logged in as wrong user' do
+      other = create(:other)
+      user = create(:user)
+      post login_path, params: { session: attributes_for(:user) }
+
+      patch user_path(other), params: { user: attributes_for(:user) }
+
+      expect(flash).to be
+      expect(response).to redirect_to(root_url)
+    end
+  end
+
   describe 'POST /edit' do
     it 'unsuccessful edit' do
       user = create(:user)
