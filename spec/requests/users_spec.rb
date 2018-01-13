@@ -54,6 +54,28 @@ RSpec.describe "Users", type: :request do
 
       patch user_path(user), params: { user: invalid_user }
       expect(response).to render_template(:edit)
+      expect(response.body).to include('4 errors')
+    end
+
+    it 'successful edit' do
+      user = create(:user)
+      get edit_user_path(user)
+      name, email = 'Foo Bar', 'foo@bar.com'
+      new_user = build(:user, name: name, email: email)
+      patch user_path(user), params: {
+        user: {
+          name: name,
+          email: email,
+          password: '',
+          password_confirmation: ''
+        }
+      }
+      expect(flash[:success]).to be
+      expect(response).to redirect_to(user_url(user))
+
+      user.reload
+      expect([user.name, user.email]).to eq [name, email]
+
     end
   end
 end
