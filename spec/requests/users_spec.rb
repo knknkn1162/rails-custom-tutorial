@@ -98,5 +98,17 @@ RSpec.describe "Users", type: :request do
       user.reload
       expect([user.name, user.email]).to eq [name, email]
     end
+
+    it 'successful edit with friendly forwarding' do
+      user = create(:user)
+
+      # first edit_user_path and then login
+      get edit_user_path(user)
+      # remember accessing url
+      expect(session[:forwarding_url]).to eq edit_user_url(user)
+
+      post login_path, params: { session: attributes_for(:user) }
+      expect(response).to redirect_to(edit_user_url(user))
+    end
   end
 end
