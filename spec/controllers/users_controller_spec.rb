@@ -11,6 +11,13 @@ RSpec.describe UsersController, type: :controller do
     }
   }
 
+  describe 'GET #index' do
+    it 'returns successful redirection' do
+      get :index
+      expect(response).to redirect_to('/login')
+    end
+  end
+
   describe "GET #signup" do
     it "returns http success" do
       get :new
