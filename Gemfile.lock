@@ -96,6 +96,8 @@ GEM
     factory_bot_rails (4.8.2)
       factory_bot (~> 4.8.2)
       railties (>= 3.0.0)
+    faker (1.8.7)
+      i18n (>= 0.7)
     fasterer (0.3.2)
       colorize (~> 0.7)
       ruby_parser (~> 3.7)
@@ -286,6 +288,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   debride
   factory_bot_rails
+  faker
   fasterer
   jbuilder (~> 2.5)
   jquery-rails
