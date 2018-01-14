@@ -39,5 +39,4 @@ RSpec.feature "StaticPages", type: :feature do
       expect(current_path).to eq login_path
     end
   end
-
 end
