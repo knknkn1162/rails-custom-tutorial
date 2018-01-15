@@ -66,7 +66,7 @@ RSpec.feature "Users", type: :feature do
     end
 
     scenario 'should redirect to login_url as non-login user' do
-      user = create(:user)
+      create(:user)
       # without log-in
       visit users_path
 
