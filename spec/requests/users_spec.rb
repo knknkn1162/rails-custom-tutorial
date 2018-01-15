@@ -159,6 +159,29 @@ RSpec.describe "Users", type: :request do
     end
   end
 
+  describe 'GET /index' do
+    it 'should not show unactivated user' do
+      create(:other, activated: false)
+      create(:user)
+      post login_path, params: { session: attributes_for(:user) }
+
+      # get /index
+      get users_path
+      users = assigns(:users)
+      expect(users.size).to eq 1
+    end
+  end
+
+  describe 'GET /show' do
+    it 'should redirect to user_urlwhen access to unactivated users' do
+      other = create(:other, activated: false)
+      create(:user)
+      post login_path, params: { session: attributes_for(:user) }
+      get user_path(other)
+      expect(response).to redirect_to(root_url)
+    end
+  end
+
   describe 'DELETE /edit' do
     it 'should redirect destroy when logged in as a non-admin' do
       create(:other)
