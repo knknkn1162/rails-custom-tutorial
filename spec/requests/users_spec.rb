@@ -76,6 +76,22 @@ RSpec.describe "Users", type: :request do
       expect(response.body).to include('4 errors')
     end
 
+    it 'should not allow the admin attribute to be edited via the web' do
+      other = create(:other)
+      expect(other.admin?).to be false
+      post login_path, params: { session: attributes_for(:other) }
+
+      # check malicious admin change
+      patch user_path(other), params: { user: {
+        password: 'foobar',
+        password_confirmation: 'foobar',
+        admin: true
+      } }
+
+      other.reload
+      expect(other.admin?).to be false
+    end
+
     it 'successful edit' do
       user = create(:user)
       # login in advance
