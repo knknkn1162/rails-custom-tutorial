@@ -135,9 +135,21 @@ RSpec.describe "Users", type: :request do
 
       post login_path, params: { session: attributes_for(:other) }
       expect {
-        delete logout_path, params: { user: attributes_for(:user), id: user.id }
+        delete user_path(user)
       }.to change(User, :count).by(0)
       expect(response).to redirect_to(root_url)
+    end
+
+    it 'should delete designated user when logout_path' do
+      other = create(:other)
+      create(:user)
+
+      post login_path, params: { session: attributes_for(:user) }
+      expect {
+        delete user_path(other)
+      }.to change(User, :count).by(-1)
+
+      expect(response).to redirect_to(users_path)
     end
   end
 end

@@ -72,5 +72,40 @@ RSpec.feature "Users", type: :feature do
 
       expect(current_path).to eq login_path
     end
+
+    scenario 'index as admin including pagination and delete links' do
+      admin = create(:user)
+      # add non-admin
+      non_admin = create(:other)
+      visit login_path
+      fill_in 'Email', with: admin.email
+      fill_in 'Password', with: admin.password
+
+      click_button 'Log in'
+      expect(current_path).to eq(user_path(admin))
+      visit users_path
+
+      User.paginate(page: 1).each do |u|
+        if u == admin
+          expect(page).to have_link href: user_path(u), text: 'delete', count: 0
+        else
+          expect(page).to have_link href: user_path(u), text: 'delete'
+        end
+      end
+    end
+
+    scenario 'index as non-admin' do
+      other = create(:other)
+      visit login_path
+      fill_in 'Email', with: other.email
+      fill_in 'Password', with: other.password
+
+      click_button 'Log in'
+
+      visit users_path
+      User.paginate(page: 1).each do |u|
+        expect(page).to have_link text: 'delete', count: 0
+      end
+    end
   end
 end
