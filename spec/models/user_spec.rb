@@ -51,6 +51,12 @@ RSpec.describe User, type: :model do
       expect(user).not_to be_valid
     end
   end
+  context 'user method test' do
+    it 'works authenticated method' do
+      user = build(:user)
+      expect(user.authenticated?(:remember, '')).not_to be
+    end
+  end
   context 'callback test' do
     let(:user) { create(:user, email: 'Foo@ExAmPle.CoM') }
     it 'email addresses sholdb be saved as lower-case' do
