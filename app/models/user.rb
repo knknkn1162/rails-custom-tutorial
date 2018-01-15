@@ -12,11 +12,12 @@ class User < ApplicationRecord
     uniqueness: { case_sensitive: false }
   validates :password,
     presence: true,
-    length: { minimum: 6 }
+    length: { minimum: 6 },
+    allow_nil: true
   # you can use password & password_confirmation attribute
   # and authenticate method
   has_secure_password
-  
+
   def remember
     self.remember_token = User.new_token
     update_attribute(:remember_digest, User.digest(remember_token))
