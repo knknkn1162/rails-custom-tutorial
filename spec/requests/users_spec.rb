@@ -127,4 +127,17 @@ RSpec.describe "Users", type: :request do
       expect(response).to redirect_to(edit_user_url(user))
     end
   end
+
+  describe 'DELETE /edit' do
+    it 'should redirect destroy when logged in as a non-admin' do
+      create(:other)
+      user = create(:user)
+
+      post login_path, params: { session: attributes_for(:other) }
+      expect {
+        delete logout_path, params: { user: attributes_for(:user), id: user.id }
+      }.to change(User, :count).by(0)
+      expect(response).to redirect_to(root_url)
+    end
+  end
 end
