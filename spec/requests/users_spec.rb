@@ -14,12 +14,12 @@ RSpec.describe "Users", type: :request do
     # accompany with redirect
     it 'submit with valid users' do
       expect { post users_path, params: { user: attributes_for(:user) } }.to change(User, :count).by(1)
-      expect(response).to redirect_to(assigns(:user))
-
-      follow_redirect!
-      expect(response).to render_template(:show)
+      expect(response).to redirect_to(root_url)
+      # follow_redirect!
+      # expect(response).to render_template(:show)
+      # expect(is_logged_in?).to be true
       # assume success signup
-      expect(response.body).to include('Welcome to the Sample App!')
+      # expect(response.body).to include('Welcome to the Sample App!')
     end
   end
 
