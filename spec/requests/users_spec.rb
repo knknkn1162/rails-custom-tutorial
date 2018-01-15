@@ -10,17 +10,47 @@ RSpec.describe "Users", type: :request do
     }
   }
 
+  before :each do
+    ActionMailer::Base.deliveries.clear
+  end
+
   describe "POST /signup" do
     # accompany with redirect
     it 'submit with valid users' do
       expect { post users_path, params: { user: attributes_for(:user) } }.to change(User, :count).by(1)
-      expect(response).to redirect_to(root_url)
-      expect(flash[:info]).to be
-      # follow_redirect!
-      # expect(response).to render_template(:show)
-      # expect(is_logged_in?).to be true
-      # assume success signup
-      # expect(response.body).to include('Welcome to the Sample App!')
+      expect(ActionMailer::Base.deliveries.size).to eq 1
+      user = assigns(:user)
+      expect(user.activated?).to be false
+    end
+
+    it 'log_in as unactivated-user' do
+      post login_path, params: { session: attributes_for(:user) }
+      expect(session[:user_id]).not_to be
+    end
+
+    it 'log_in as invalid activation' do
+      user = build(:user)
+      get edit_account_activation_path('invalid token', email: user.email)
+      expect(session[:user_id]).not_to be
+    end
+
+    it 'log_in as valid activation and invalid email' do
+      post users_path, params: { user: attributes_for(:user) }
+      user = assigns(:user)
+      get edit_account_activation_path(user.activation_token, email: 'wrong')
+      expect(session[:user_id]).not_to be
+    end
+
+    it 'log_in as valid activation adn valid email' do
+      post users_path, params: { user: attributes_for(:user) }
+      user = assigns(:user)
+      get edit_account_activation_path(user.activation_token, email: user.email)
+      user.reload
+      expect(user.activated?).to be
+
+      follow_redirect!
+      expect(response).to render_template(:show)
+      expect(session[:user_id]).to be
     end
   end
 
