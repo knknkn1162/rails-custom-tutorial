@@ -21,17 +21,19 @@ RSpec.describe UserMailer, type: :mailer do
 
   describe "password_reset" do
     it "renders the headers" do
-      user = build(:user, activation_token: User.new_token)
-      mail = UserMailer.account_activation(user)
-      #expect(mail.subject).to eq("Password reset")
-      #expect(mail.to).to eq(["to@example.org"])
-      #expect(mail.from).to eq(["from@example.com"])
+      user = build(:user, reset_token: User.new_token)
+      mail = UserMailer.password_reset(user)
+      expect(mail.subject).to eq('Password reset')
+      expect(mail.to).to eq([user.email])
+      expect(mail.from).to eq(['noreply@example.com'])
     end
 
     it "renders the body" do
-      user = build(:user, activation_token: User.new_token)
-      mail = UserMailer.account_activation(user)
-      #expect(mail.body.encoded).to match("Hi")
+      user = build(:user, reset_token: User.new_token)
+
+      mail = UserMailer.password_reset(user)
+      expect(mail.body.encoded).to match(user.reset_token)
+      expect(mail.body.encoded).to match(CGI.escape(user.email))
     end
   end
 
