@@ -40,9 +40,18 @@ RSpec.describe "PasswordResets", type: :request do
     end
 
     it 'works with valid users and reset_token' do
-      user = post_password_reset
+      user = edit_password_reset
       get edit_password_reset_path(user.reset_token, email: user.email)
-      expect(response).to render_template(:edit)
+      patch password_reset_path(user.reset_token), params: {
+        email: user.email,
+        user: {
+          password: 'foobaz',
+          password_confirmation: 'foobaz'
+        }
+      }
+      expect(session[:user_id]).to be
+      expect(flash).not_to be_empty
+      expect(response).to redirect_to(user_path(user))
     end
   end
 end
