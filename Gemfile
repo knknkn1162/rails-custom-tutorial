@@ -34,6 +34,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'faker'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
+gem 'capybara-email'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
