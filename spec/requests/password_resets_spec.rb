@@ -39,6 +39,22 @@ RSpec.describe "PasswordResets", type: :request do
       expect(response).to redirect_to(root_url)
     end
 
+    it 'doesnt work with expired token' do
+      user = edit_password_reset
+      # assume that token had expired.
+      user.update_attribute(:reset_sent_at, 3.hours.ago)
+      patch password_reset_path(user.reset_token), params: {
+        email: user.email,
+        user: {
+          password: 'foobaz',
+          password_confirmation: 'foobaz'
+        }
+      }
+      expect(response).to have_http_status(:redirect)
+      follow_redirect!
+      expect(response.body).to match /expired/
+    end
+
     it 'works with valid users and reset_token' do
       user = edit_password_reset
       get edit_password_reset_path(user.reset_token, email: user.email)
