@@ -11,7 +11,7 @@ RSpec.feature "PasswordResets", type: :feature do
     fill_in 'Email', with: user.email
     click_button 'Submit'
     open_email(user.email)
-    open_email.click_link 'Reset password'
+    current_email.click_link 'Reset password'
     expect(page).to have_title 'Reset password'
   }
 
