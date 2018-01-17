@@ -26,4 +26,15 @@ RSpec.describe Micropost, type: :model do
       expect(micropost).not_to be_valid
     end
   end
+
+  context 'order test' do
+    it 'should ordered by created_at descendently' do
+      user = create(:user)
+      microposts = %i[orange micropost tau].map{
+        |s| user.microposts.create(attributes_for(s))
+      }
+      # check correct order
+      expect(user.microposts.first).to eq microposts[1]
+    end
+  end
 end
