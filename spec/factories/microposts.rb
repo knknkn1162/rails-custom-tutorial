@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :micropost do
     content 'MyText'
     created_at { Time.zone.now }
+    user
 
     factory :orange do
       content 'I ate an orange'
