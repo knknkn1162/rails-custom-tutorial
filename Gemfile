@@ -35,7 +35,9 @@ gem 'faker'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'capybara-email'
-
+gem 'carrierwave'
+gem 'mini_magick'
+gem 'fog-aws'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
