@@ -82,6 +82,7 @@ RSpec.describe User, type: :model do
       expect(user.following?(other)).to be_falsy
       user.follow(other)
       expect(user.following?(other)).to be_truthy
+      expect(other.followers).to include user
     end
     it 'should unfollow a user' do
       other = create(:other)
