@@ -74,4 +74,24 @@ RSpec.describe User, type: :model do
       expect(user.email).to eq('foo@example.com')
     end
   end
+
+  context 'user follow test' do
+    it 'should follow a user' do
+      user = create(:user)
+      other = create(:other)
+      expect(user.following?(other)).to be_falsy
+      user.follow(other)
+      expect(user.following?(other)).to be_truthy
+    end
+    it 'should unfollow a user' do
+      other = create(:other)
+      user = create(:user) do |user|
+        user.follow(other)
+      end
+
+      expect(user.following?(other)).to be_truthy
+      user.unfollow(other)
+      expect(user.following?(other)).to be_falsy
+    end
+  end
 end
