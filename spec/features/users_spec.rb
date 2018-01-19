@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.feature "Users", type: :feature do
+  include ApplicationHelper
   scenario 'fill in invalid_user' do
     visit signup_path
     fill_in 'Name', with: ''
@@ -105,6 +106,29 @@ RSpec.feature "Users", type: :feature do
       visit users_path
       User.paginate(page: 1).each do |u|
         expect(page).to have_link text: 'delete', count: 0
+      end
+    end
+  end
+
+  describe 'profile test' do
+    scenario 'profile display' do
+      user_with_posts = create(:user_with_posts)
+      visit login_path
+      fill_in 'Email', with: user_with_posts.email
+      fill_in 'Password', with: user_with_posts.password
+
+      click_button 'Log in'
+
+      visit user_path(user_with_posts)
+      expect(page).to have_title full_title(user_with_posts.name)
+      expect(page).to have_selector('h1', text: user_with_posts.name)
+      # have gravatar img
+      expect(page).to have_selector('h1>img.gravatar')
+      expect(body).to match user_with_posts.microposts.count.to_s
+      expect(page).to have_selector('div.pagination')
+
+      user_with_posts.microposts.paginate(page: 1).each do |micropost|
+        expect(body).to match micropost.content
       end
     end
   end

@@ -57,6 +57,16 @@ RSpec.describe User, type: :model do
       expect(user.authenticated?(:remember, '')).not_to be
     end
   end
+
+  context 'user association test' do
+    it 'destroys all posts associated with user' do
+      user = create(:user) do |user|
+        user.microposts.create(attributes_for(:micropost))
+      end
+
+      expect{user.destroy}.to change(user.microposts, :count).by(-1)
+    end
+  end
   context 'callback test' do
     let(:user) { create(:user, email: 'Foo@ExAmPle.CoM') }
     it 'email addresses sholdb be saved as lower-case' do
