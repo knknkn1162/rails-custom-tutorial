@@ -37,7 +37,6 @@ gem 'bootstrap-will_paginate'
 gem 'capybara-email'
 gem 'carrierwave'
 gem 'mini_magick'
-gem 'fog-aws'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
@@ -75,6 +74,7 @@ end
 
 group :production do
   gem 'pg'
+  gem 'fog'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
